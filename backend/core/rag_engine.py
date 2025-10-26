@@ -3,6 +3,7 @@ from langchain_classic.chains.history_aware_retriever import create_history_awar
 from langchain_classic.chains.combine_documents import create_stuff_documents_chain
 from config.prompts import contextual_prompt, qa_prompt
 from utils.vector_store import load_vectorstore
+
 class RAGEngine:
     def __init__(self, vectorstore,llm):
         self.vectorestore = vectorstore
@@ -17,9 +18,9 @@ class RAGEngine:
             search_kwargs={
                 "k": 5,
                 "fetch_k":20, # Fetch more documents to allow MMR to select the best ones.
-                "lambda_mult":0.7, # Balance between relevance and diversity.
+                "lambda_mult":0.9, # Balance between relevance and diversity.
                 }
-        ) # Retrieve top 3 similar chunks for context and use them to answer the question.
+        ) # Retrieve top 5 similar chunks for context and use them to answer the question.
         
         # Create history-aware retriever
         history_aware_retriever = create_history_aware_retriever(

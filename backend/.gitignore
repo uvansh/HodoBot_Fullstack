@@ -9,3 +9,9 @@ env
 .vscode
 chroma_db
 imgs
+venv/
+__pycache__/
+*.pyc
+.env
+chroma_db/
+.DS_Store

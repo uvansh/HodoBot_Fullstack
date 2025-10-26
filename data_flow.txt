@@ -1,0 +1,96 @@
+┌─────────────────────────────────────────────────────┐
+│                   FRONTEND                          │
+│  ┌──────────────────────────────────────────────┐  │
+│  │  ChatInterface.tsx                           │  │
+│  │  • User types message                        │  │
+│  │  • Sends POST to /chat                       │  │
+│  │  • Displays response                         │  │
+│  └─────────────────┬────────────────────────────┘  │
+│                    │ HTTP Request                   │
+└────────────────────┼────────────────────────────────┘
+                     │
+                     ↓
+┌─────────────────────────────────────────────────────┐
+│                   BACKEND                           │
+│  ┌──────────────────────────────────────────────┐  │
+│  │  api_main.py                                 │  │
+│  │  • /chat endpoint receives request           │  │
+│  │  • Converts history to Message objects       │  │
+│  └─────────────────┬────────────────────────────┘  │
+│                    │                                │
+│                    ↓                                │
+│  ┌──────────────────────────────────────────────┐  │
+│  │  core/router.py                              │  │
+│  │  • needs_real_time_data(question)?           │  │
+│  │    ├─ YES → Tool Handler                     │  │
+│  │    └─ NO  → RAG Engine                       │  │
+│  └──────┬──────────────────────┬────────────────┘  │
+│         │                      │                    │
+│    [Tools]                 [RAG]                    │
+│         │                      │                    │
+│         ↓                      ↓                    │
+│  ┌─────────────┐       ┌──────────────┐            │
+│  │ToolHandler  │       │  RAGEngine   │            │
+│  │             │       │              │            │
+│  │ 1. Detect   │       │ 1. Search    │            │
+│  │    tool     │       │    vectorDB  │            │
+│  │    needed   │       │              │            │
+│  │             │       │ 2. Get docs  │            │
+│  │ 2. Call     │       │              │            │
+│  │    get_     │       │ 3. Send to   │            │
+│  │    weather()│       │    LLM with  │            │
+│  │             │       │    context   │            │
+│  │ 3. Format   │       │              │            │
+│  │    result   │       │ 4. Return    │            │
+│  │             │       │    answer    │            │
+│  └─────┬───────┘       └──────┬───────┘            │
+│        │                      │                    │
+│        └──────────┬───────────┘                    │
+│                   │                                │
+│                   ↓                                │
+│  ┌──────────────────────────────────────────────┐  │
+│  │  Response back to api_main.py                │  │
+│  │  • Format as ChatResponse                    │  │
+│  │  • Include sources                           │  │
+│  └─────────────────┬────────────────────────────┘  │
+│                    │ HTTP Response                  │
+└────────────────────┼────────────────────────────────┘
+                     │
+                     ↓
+┌─────────────────────────────────────────────────────┐
+│               FRONTEND DISPLAYS                     │
+│  • Bot message appears                              │
+│  • Sources shown                                    │
+│  • Add to chat history                              │
+└─────────────────────────────────────────────────────┘
+
+
+doubts: 
+
+converts history to message objects
+format as ChatResponse
+Send to LLM with context
+Format Result
+formats responses
+llm.bind_tools(schema)
+Tool handler -> formats result with LLM -> returns {answer:"it's 18 deg C in Tokyo...",
+sources:[...]}
+What is ChatResponse
+
+
+----------------------------------------------
+# Frontend uses simple dicts
+{role: "user", content: "..."}
+
+# Backend converts to LangChain objects
+HumanMessage(content="...")
+```
+
+### 4. **Tool Calling Pattern**
+```
+Schemas (JSON) → LLM decides → Execute function → Format result
+```
+
+### 5. **RAG Pattern**
+```
+Question → Search vectors → Get docs → LLM + context → Answer

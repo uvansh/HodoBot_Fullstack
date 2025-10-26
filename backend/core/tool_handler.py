@@ -1,4 +1,4 @@
-from langchain_core.messages import HumanMessage, AIMessage, ToolMessage
+from langchain_core.messages import HumanMessage
 import json
 
 class ToolHandler:
@@ -12,7 +12,7 @@ class ToolHandler:
         self.tool_schemas = tool_schemas  # The schemas
         self.functions = available_functions  # The actual functions
         
-    def execute_tools(self, question, messages_dict=None):
+    def execute_tools(self, question):
         print(f"🛠️ ToolHandler called with: {question}")
         
         # Bind tools (schemas) to LLM
@@ -49,6 +49,7 @@ class ToolHandler:
     
     def _format_tool_results(self, results, question):
         """Format tool results into a natural response"""
+        
         if not results:
             return "I couldn't fetch that information."
         
@@ -60,6 +61,5 @@ class ToolHandler:
         {context}
 
         Answer naturally and conversationally:"""
-        
         response = self.llm.invoke([HumanMessage(content=format_prompt)])
         return response.content
