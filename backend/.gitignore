@@ -1,0 +1,11 @@
+*.env
+*./*.env
+venv
+__pycache__/
+*.pyc
+.env
+env
+*/.env
+.vscode
+chroma_db
+imgs
