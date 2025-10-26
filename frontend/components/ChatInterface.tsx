@@ -9,6 +9,8 @@ interface Message {
     sources?: Array<{ file: string; content: string}>
 }
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
 export default function ChatInterface() {
     const [messages, setMessages] = useState<Message[]>([])
     const [input, setInput] = useState('')
@@ -28,7 +30,7 @@ export default function ChatInterface() {
         setLoading(true)
 
         try {
-            const response = await fetch('http://localhost:8000/chat', {
+            const response = await fetch(`${API_URL}/chat`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

@@ -83,7 +83,7 @@ app = FastAPI(title="HodoBot API",description="AI Travel Assistant.",lifespan=ap
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"], # Next.js frontend
+    allow_origins=["*"], # Next.js frontend
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
