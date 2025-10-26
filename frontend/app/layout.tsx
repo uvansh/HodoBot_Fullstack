@@ -1,4 +1,3 @@
-// @ts-expect-error: Allow side-effect CSS import without type declarations
 import "./globals.css";
 
 export default function RootLayout({
