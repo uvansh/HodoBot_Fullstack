@@ -9,7 +9,9 @@ interface Message {
     sources?: Array<{ file: string; content: string}>
 }
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL ||
+  "localhost:8000";
 
 export default function ChatInterface() {
     const [messages, setMessages] = useState<Message[]>([])
